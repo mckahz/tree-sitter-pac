@@ -1,1 +1,1 @@
-tree-sitter generate && tree-sitter parse ../test/basic/Main.pac
+tree-sitter generate && tree-sitter parse ../../test/basic/Main.pac
