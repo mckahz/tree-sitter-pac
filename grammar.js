@@ -31,6 +31,7 @@ module.exports = grammar({
     module_name: ($) => pascal_case,
     _export: ($) => choice($.value_ident, $.type_ident),
     type_ident: ($) => pascal_case,
+    constructor_ident: ($) => pascal_case,
     value_ident: ($) => seq(snake_case, optional("?")),
 
     _type: ($) =>
@@ -46,9 +47,10 @@ module.exports = grammar({
 
     sum_type: ($) => repeat1(seq("|", $.value_constructor)),
     type_param: ($) => snake_case,
-    type_constructor: ($) => seq($.type_ident, repeat($.type_param)),
-    value_constructor: ($) =>
-      seq($.type_ident, repeat(choice($.type_param, seq("(", $._type, ")")))),
+    type_constructor: ($) => seq($.type_ident, repeat($._type_arg)),
+    value_constructor: ($) => seq($.constructor_ident, repeat($._type_arg)),
+    _type_arg: ($) =>
+      choice($.type_param, $.primative_type, seq("(", $._type, ")")),
 
     _expr: ($) =>
       choice(
@@ -69,6 +71,7 @@ module.exports = grammar({
     binary_expr: ($) =>
       choice(
         prec.left(1, seq($._expr, "==", $._expr)),
+        prec.left(1, seq($._expr, "::", $._expr)),
         prec.left(1, seq($._expr, "&&", $._expr)),
         prec.left(1, seq($._expr, "||", $._expr)),
         prec.left(1, seq($._expr, "+", $._expr)),
@@ -94,6 +97,7 @@ module.exports = grammar({
       choice(
         $.accessor,
         $.value_ident,
+        $.constructor_ident,
         $.number,
         seq("(", $._expr, ")"),
         $.list,
