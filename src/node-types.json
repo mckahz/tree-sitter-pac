@@ -55,6 +55,10 @@
           "named": true
         },
         {
+          "type": "extern_expr",
+          "named": true
+        },
+        {
           "type": "if_expr",
           "named": true
         },
@@ -126,6 +130,10 @@
           "named": true
         },
         {
+          "type": "extern_expr",
+          "named": true
+        },
+        {
           "type": "if_expr",
           "named": true
         },
@@ -190,6 +198,10 @@
         },
         {
           "type": "crash_expr",
+          "named": true
+        },
+        {
+          "type": "extern_expr",
           "named": true
         },
         {
@@ -279,6 +291,90 @@
     }
   },
   {
+    "type": "exports",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "type_ident",
+          "named": true
+        },
+        {
+          "type": "value_ident",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extern_expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extern_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_type",
+          "named": true
+        },
+        {
+          "type": "primative_type",
+          "named": true
+        },
+        {
+          "type": "record_type",
+          "named": true
+        },
+        {
+          "type": "type_constructor",
+          "named": true
+        },
+        {
+          "type": "type_param",
+          "named": true
+        },
+        {
+          "type": "value_ident",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "function_type",
     "named": true,
     "fields": {},
@@ -292,6 +388,10 @@
         },
         {
           "type": "primative_type",
+          "named": true
+        },
+        {
+          "type": "record_type",
           "named": true
         },
         {
@@ -331,6 +431,10 @@
         },
         {
           "type": "crash_expr",
+          "named": true
+        },
+        {
+          "type": "extern_expr",
           "named": true
         },
         {
@@ -424,6 +528,10 @@
           "named": true
         },
         {
+          "type": "extern_expr",
+          "named": true
+        },
+        {
           "type": "if_expr",
           "named": true
         },
@@ -503,6 +611,10 @@
           "named": true
         },
         {
+          "type": "extern_expr",
+          "named": true
+        },
+        {
           "type": "if_expr",
           "named": true
         },
@@ -574,6 +686,10 @@
           "named": true
         },
         {
+          "type": "extern_expr",
+          "named": true
+        },
+        {
           "type": "if_expr",
           "named": true
         },
@@ -621,15 +737,11 @@
       "required": true,
       "types": [
         {
+          "type": "exports",
+          "named": true
+        },
+        {
           "type": "module_name",
-          "named": true
-        },
-        {
-          "type": "type_ident",
-          "named": true
-        },
-        {
-          "type": "value_ident",
           "named": true
         }
       ]
@@ -646,6 +758,21 @@
     "fields": {}
   },
   {
+    "type": "record_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "field_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "signature",
     "named": true,
     "fields": {},
@@ -659,6 +786,10 @@
         },
         {
           "type": "primative_type",
+          "named": true
+        },
+        {
+          "type": "record_type",
           "named": true
         },
         {
@@ -745,6 +876,10 @@
           "named": true
         },
         {
+          "type": "record_type",
+          "named": true
+        },
+        {
           "type": "type_constructor",
           "named": true
         },
@@ -768,7 +903,42 @@
       "required": true,
       "types": [
         {
+          "type": "extern_type",
+          "named": true
+        },
+        {
           "type": "sum_type",
+          "named": true
+        },
+        {
+          "type": "type_def_constructor",
+          "named": true
+        },
+        {
+          "type": "value_constructor",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_def_constructor",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_type",
+          "named": true
+        },
+        {
+          "type": "primative_type",
+          "named": true
+        },
+        {
+          "type": "record_type",
           "named": true
         },
         {
@@ -776,7 +946,11 @@
           "named": true
         },
         {
-          "type": "value_constructor",
+          "type": "type_ident",
+          "named": true
+        },
+        {
+          "type": "type_param",
           "named": true
         }
       ]
@@ -818,6 +992,10 @@
         },
         {
           "type": "crash_expr",
+          "named": true
+        },
+        {
+          "type": "extern_expr",
           "named": true
         },
         {
@@ -880,6 +1058,10 @@
           "named": true
         },
         {
+          "type": "record_type",
+          "named": true
+        },
+        {
           "type": "type_constructor",
           "named": true
         },
@@ -924,6 +1106,10 @@
         },
         {
           "type": "empty_list",
+          "named": true
+        },
+        {
+          "type": "extern_expr",
           "named": true
         },
         {
@@ -1004,6 +1190,10 @@
         },
         {
           "type": "crash_expr",
+          "named": true
+        },
+        {
+          "type": "extern_expr",
           "named": true
         },
         {
@@ -1130,7 +1320,15 @@
     "named": false
   },
   {
+    "type": "Float",
+    "named": false
+  },
+  {
     "type": "Int",
+    "named": false
+  },
+  {
+    "type": "Nat",
     "named": false
   },
   {
@@ -1150,10 +1348,6 @@
     "named": false
   },
   {
-    "type": "];",
-    "named": false
-  },
-  {
     "type": "crash",
     "named": false
   },
@@ -1164,6 +1358,10 @@
   {
     "type": "empty_list",
     "named": true
+  },
+  {
+    "type": "extern",
+    "named": false
   },
   {
     "type": "if",
@@ -1202,6 +1400,10 @@
     "named": true
   },
   {
+    "type": "{",
+    "named": false
+  },
+  {
     "type": "|",
     "named": false
   },
@@ -1211,6 +1413,10 @@
   },
   {
     "type": "||",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   }
 ]

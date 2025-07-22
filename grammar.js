@@ -10,45 +10,38 @@
 const pascal_case = new RustRegex("[A-Z]+[a-zA-Z]*");
 const snake_case = new RustRegex("[a-z_]+[a-z0-9_]*");
 const comma_seperated = (rule) =>
-  optional(seq(optional(","), rule, repeat(seq(",", rule)), optional(",")));
+  choice(seq(rule, repeat(seq(",", rule))), optional(rule));
 
 module.exports = grammar({
   name: "pac",
 
   rules: {
     source_file: ($) => seq($.module_decl, repeat($._statement)),
-    module_decl: ($) =>
-      seq(
-        "module",
-        $.module_name,
-        "[",
-        choice(
-          seq($._export, repeat(seq(",", $._export))),
-          optional($._export),
-        ),
-        "];",
-      ),
+    module_decl: ($) => seq("module", $.module_name, $.exports, ";"),
     module_name: ($) => pascal_case,
+    exports: ($) => seq("[", comma_seperated($._export), "]"),
     _export: ($) => choice($.value_ident, $.type_ident),
+
     type_ident: ($) => pascal_case,
     constructor_ident: ($) => pascal_case,
     value_ident: ($) => seq(snake_case, optional("?")),
 
-    _type: ($) =>
+    _type: ($) => choice($.function_type, $.type_constructor, $._type_term),
+    _type_term: ($) =>
       choice(
-        seq("(", $._type, ")"),
-        $.function_type,
-        $.primative_type,
-        $.type_constructor,
         $.type_param,
+        $.primative_type,
+        $.record_type,
+        seq("(", $._type, ")"),
       ),
+    type_constructor: ($) => seq($.type_ident, repeat($._type_term)),
+    record_type: ($) => seq("{", comma_seperated($.field_type), "}"),
+    field_type: ($) => seq($.value_ident, ":", $._type),
     function_type: ($) => prec.right(seq($._type, "->", $._type)),
-    primative_type: ($) => choice("Bool", "Int", "String", "()"),
+    primative_type: ($) =>
+      choice("Bool", "Int", "Float", "Nat", "String", "()"),
 
-    sum_type: ($) => repeat1(seq("|", $.value_constructor)),
     type_param: ($) => snake_case,
-    type_constructor: ($) => seq($.type_ident, repeat($._type_arg)),
-    value_constructor: ($) => seq($.constructor_ident, repeat($._type_arg)),
     _type_arg: ($) =>
       choice($.type_param, $.primative_type, seq("(", $._type, ")")),
 
@@ -59,6 +52,7 @@ module.exports = grammar({
         $.let_expr,
         $.lambda,
         $.crash_expr,
+        $.extern_expr,
         $.string,
         $.binary_expr,
         $.unary_expr,
@@ -66,6 +60,7 @@ module.exports = grammar({
         $._term,
       ),
     crash_expr: ($) => seq("crash", $.string),
+    extern_expr: ($) => seq("extern", $.string),
     string: ($) => seq('"', new RustRegex('[^"]*'), '"'),
     unary_expr: ($) => prec(2, choice(seq("-", $._expr), seq("!", $._expr))),
     binary_expr: ($) =>
@@ -99,24 +94,11 @@ module.exports = grammar({
         $.value_ident,
         $.constructor_ident,
         $.number,
-        seq("(", $._expr, ")"),
         $.list,
+        seq("(", $._expr, ")"),
       ),
     accessor: ($) => seq($.module_name, ".", $.value_ident),
-    list: ($) =>
-      seq(
-        "[",
-        choice(
-          "]",
-          seq(
-            choice(
-              $._expr,
-              seq(repeat1(seq($._expr, ",")), $._expr, optional(",")),
-            ),
-            "]",
-          ),
-        ),
-      ),
+    list: ($) => seq("[", comma_seperated($._expr), "]"),
     number: ($) => new RustRegex("-?[0-9]+"),
 
     _statement: ($) => choice($.import, $.type_def, $.signature, $.value_def),
@@ -126,13 +108,18 @@ module.exports = grammar({
     type_def: ($) =>
       seq(
         "let",
-        $.type_constructor,
+        $.type_def_constructor,
         "=",
-        choice($.value_constructor, $.sum_type),
+        choice($.value_constructor, $.sum_type, $.extern_type),
         ";",
       ),
+    extern_type: ($) => seq("extern", $.string),
+    sum_type: ($) => repeat1(seq("|", $.value_constructor)),
+    type_def_constructor: ($) => seq($.type_ident, repeat($._type_arg)),
+    value_constructor: ($) => seq($.constructor_ident, repeat($._type_arg)),
 
     signature: ($) => seq("let", $.value_ident, ":", $._type, ";"),
+
     value_def: ($) =>
       seq("let", $.value_ident, repeat($._pattern), "=", $._expr, ";"),
   },
