@@ -1,1 +1,1 @@
-tree-sitter generate && tree-sitter parse ../../test/basic/Main.pac
+~/.cargo/bin/tree-sitter generate && ~/.cargo/bin/tree-sitter parse ../pac/test/basic/List.pac

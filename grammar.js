@@ -17,19 +17,54 @@ module.exports = grammar({
 
   rules: {
     source_file: ($) => seq($.module_decl, repeat($._statement)),
-    module_decl: ($) => seq("module", $.module_name, "[];"),
+    module_decl: ($) =>
+      seq(
+        "module",
+        $.module_name,
+        "[",
+        choice(
+          seq($._export, repeat(seq(",", $._export))),
+          optional($._export),
+        ),
+        "];",
+      ),
     module_name: ($) => pascal_case,
-
+    _export: ($) => choice($.value_ident, $.type_ident),
     type_ident: ($) => pascal_case,
     value_ident: ($) => seq(snake_case, optional("?")),
 
-    _type: ($) => choice($.primative_type, $.higher_kinded_type),
-    type_param: ($) => snake_case,
-    higher_kinded_type: ($) => seq($.type_ident, repeat1($.primative_type)),
+    _type: ($) =>
+      choice(
+        seq("(", $._type, ")"),
+        $.function_type,
+        $.primative_type,
+        $.type_constructor,
+        $.type_param,
+      ),
+    function_type: ($) => prec.right(seq($._type, "->", $._type)),
     primative_type: ($) => choice("Bool", "Int", "String", "()"),
 
+    sum_type: ($) => repeat1(seq("|", $.value_constructor)),
+    type_param: ($) => snake_case,
+    type_constructor: ($) => seq($.type_ident, repeat($.type_param)),
+    value_constructor: ($) =>
+      seq($.type_ident, repeat(choice($.type_param, seq("(", $._type, ")")))),
+
     _expr: ($) =>
-      choice($.if_expr, $.binary_expr, $.unary_expr, $.application, $._term),
+      choice(
+        $.if_expr,
+        $.when_expr,
+        $.let_expr,
+        $.lambda,
+        $.crash_expr,
+        $.string,
+        $.binary_expr,
+        $.unary_expr,
+        $.application,
+        $._term,
+      ),
+    crash_expr: ($) => seq("crash", $.string),
+    string: ($) => seq('"', new RustRegex('[^"]*'), '"'),
     unary_expr: ($) => prec(2, choice(seq("-", $._expr), seq("!", $._expr))),
     binary_expr: ($) =>
       choice(
@@ -44,7 +79,16 @@ module.exports = grammar({
         prec.left(1, seq($._expr, "<<", $._expr)),
       ),
     if_expr: ($) => seq("if", $._expr, "then", $._expr, "else", $._expr),
+    when_expr: ($) => seq("when", $._expr, "is", repeat($.alternative), ";"),
+    alternative: ($) => seq("|", $._pattern, "->", $._expr),
+    let_expr: ($) => seq("let", $._pattern, "=", $._expr, ";", $._expr),
+    lambda: ($) => seq("\\", repeat1($._pattern), "->", $._expr),
     application: ($) => seq($._term, repeat1($._term)),
+
+    _pattern: ($) => choice($.wildcard, $.value_ident, $.empty_list, $.cons),
+    empty_list: ($) => "[]",
+    wildcard: ($) => "_",
+    cons: ($) => prec.right(seq($._pattern, "::", $._pattern)),
 
     _term: ($) =>
       choice(
@@ -75,9 +119,17 @@ module.exports = grammar({
 
     import: ($) => seq("import", $.module_name, ";"),
 
-    type_def: ($) => seq("let", $.type_ident, "=", $._type, ";"),
+    type_def: ($) =>
+      seq(
+        "let",
+        $.type_constructor,
+        "=",
+        choice($.value_constructor, $.sum_type),
+        ";",
+      ),
 
     signature: ($) => seq("let", $.value_ident, ":", $._type, ";"),
-    value_def: ($) => seq("let", $.value_ident, "=", $._expr, ";"),
+    value_def: ($) =>
+      seq("let", $.value_ident, repeat($._pattern), "=", $._expr, ";"),
   },
 });
