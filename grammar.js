@@ -61,7 +61,7 @@ module.exports = grammar({
       ),
     crash_expr: ($) => seq("crash", $.string),
     extern_expr: ($) => seq("extern", $.string),
-    string: ($) => choice(seq('"', new RustRegex('[^"]*'), '"'), '""'),
+    string: ($) => new RustRegex('"[^"]*"'),
     unary_expr: ($) => prec(2, choice(seq("-", $._expr), seq("!", $._expr))),
     binary_expr: ($) =>
       choice(
