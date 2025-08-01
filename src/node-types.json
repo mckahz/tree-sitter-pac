@@ -395,15 +395,15 @@
       "required": true,
       "types": [
         {
-          "type": "primative_type",
-          "named": true
-        },
-        {
           "type": "record_type",
           "named": true
         },
         {
           "type": "type_constructor",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
           "named": true
         },
         {
@@ -773,11 +773,6 @@
     "fields": {}
   },
   {
-    "type": "primative_type",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "record_type",
     "named": true,
     "fields": {},
@@ -801,15 +796,15 @@
       "required": true,
       "types": [
         {
-          "type": "primative_type",
-          "named": true
-        },
-        {
           "type": "record_type",
           "named": true
         },
         {
           "type": "type_constructor",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
           "named": true
         },
         {
@@ -910,10 +905,6 @@
       "required": true,
       "types": [
         {
-          "type": "primative_type",
-          "named": true
-        },
-        {
           "type": "record_type",
           "named": true
         },
@@ -967,10 +958,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "primative_type",
-          "named": true
-        },
         {
           "type": "record_type",
           "named": true
@@ -1084,15 +1071,15 @@
           "named": true
         },
         {
-          "type": "primative_type",
-          "named": true
-        },
-        {
           "type": "record_type",
           "named": true
         },
         {
           "type": "type_constructor",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
           "named": true
         },
         {
@@ -1282,10 +1269,6 @@
     "named": false
   },
   {
-    "type": "()",
-    "named": false
-  },
-  {
     "type": ")",
     "named": false
   },
@@ -1343,26 +1326,6 @@
   },
   {
     "type": "?",
-    "named": false
-  },
-  {
-    "type": "Bool",
-    "named": false
-  },
-  {
-    "type": "Float",
-    "named": false
-  },
-  {
-    "type": "Int",
-    "named": false
-  },
-  {
-    "type": "Nat",
-    "named": false
-  },
-  {
-    "type": "String",
     "named": false
   },
   {

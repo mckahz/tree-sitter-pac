@@ -40,18 +40,13 @@ module.exports = grammar({
     _type_factor: ($) =>
       choice(
         $.type_parameter,
-        $.primative_type,
+        $.type_identifier,
         $.record_type,
         seq("(", $._type, ")"),
       ),
     type_constructor: ($) => seq($.type_identifier, repeat1($._type_factor)),
     record_type: ($) => seq("{", comma_seperated($.field_type), "}"),
     field_type: ($) => seq($.value_identifier, ":", $._type),
-    primative_type: ($) =>
-      choice("Bool", "Int", "Float", "Nat", "String", "()"),
-
-    _type_arg: ($) =>
-      choice($.type_parameter, $.primative_type, seq("(", $._type, ")")),
 
     _expr: ($) =>
       choice(
@@ -169,6 +164,9 @@ module.exports = grammar({
       ),
     extern_type: ($) => seq("extern", $.string_literal),
     sum_type: ($) => repeat1(seq("|", $.value_constructor)),
+
+    _type_arg: ($) =>
+      choice($.type_parameter, $.type_identifier, seq("(", $._type, ")")),
     type_def_constructor: ($) => seq($.type_identifier, repeat($._type_arg)),
     value_constructor: ($) =>
       seq($.constructor_identifier, repeat($._type_arg)),

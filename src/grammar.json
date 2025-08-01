@@ -191,7 +191,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "primative_type"
+          "name": "type_identifier"
         },
         {
           "type": "SYMBOL",
@@ -301,65 +301,6 @@
         {
           "type": "SYMBOL",
           "name": "_type"
-        }
-      ]
-    },
-    "primative_type": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "Bool"
-        },
-        {
-          "type": "STRING",
-          "value": "Int"
-        },
-        {
-          "type": "STRING",
-          "value": "Float"
-        },
-        {
-          "type": "STRING",
-          "value": "Nat"
-        },
-        {
-          "type": "STRING",
-          "value": "String"
-        },
-        {
-          "type": "STRING",
-          "value": "()"
-        }
-      ]
-    },
-    "_type_arg": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "type_parameter"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "primative_type"
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "("
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_type"
-            },
-            {
-              "type": "STRING",
-              "value": ")"
-            }
-          ]
         }
       ]
     },
@@ -1294,6 +1235,36 @@
           }
         ]
       }
+    },
+    "_type_arg": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_parameter"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_identifier"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_type"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
+        }
+      ]
     },
     "type_def_constructor": {
       "type": "SEQ",
